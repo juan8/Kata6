@@ -11,13 +11,15 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.ui.ApplicationFrame;
 
-public class HistogramDisplay extends ApplicationFrame {
+public class HistogramDisplay <T> extends ApplicationFrame {
     
-    private final Histogram<String> histogram;
-    
-    public HistogramDisplay(Histogram<String> histogram) {
-        super("Histograma de emails");
+    private final Histogram<T> histogram;
+    private final String nameEjeX;
+
+    public HistogramDisplay(Histogram<T> histogram, String nameEjeX) {
+        super("Histograma");
         this.histogram = histogram;
+        this.nameEjeX = nameEjeX;
         setContentPane(createPanel());
         pack();
     }
@@ -35,7 +37,7 @@ public class HistogramDisplay extends ApplicationFrame {
     private JFreeChart createChart(DefaultCategoryDataset dataset) {
         JFreeChart chart = ChartFactory.createBarChart(
                 "Histograma JFreeChar", 
-                "Dominios email", 
+                nameEjeX, 
                 "Nº de emails", 
                 dataset, 
                 PlotOrientation.VERTICAL, 
@@ -48,8 +50,8 @@ public class HistogramDisplay extends ApplicationFrame {
     private DefaultCategoryDataset createDataset() {
         DefaultCategoryDataset dataSet = new DefaultCategoryDataset();
         
-        for (String key : histogram.keySet()) {
-            dataSet.addValue(histogram.get(key), "", key);
+        for (T key : histogram.keySet()) {
+            dataSet.addValue(histogram.get(key),"",(Comparable) key);
         }
         return dataSet;
     }
